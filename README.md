@@ -24,6 +24,9 @@ yarn add react-native-multibar
 ## Usage
 
 ```javascript
+const CurrentIcon =(iconName)=>{
+    console.log('getting from icon pressed',iconName)
+}
 const TabsNavigator = createBottomTabNavigator({
     [Routes.TabsBookmarks]: {
         screen: Bookmarks,
@@ -56,6 +59,7 @@ const TabsNavigator = createBottomTabNavigator({
                 <MultiBarToggle
                     navigation={navigation}
                     actionSize={30}
+                    CurrentIcon={CurrentIcon.bind(this)}
                     routes={[
                         {
                             routeName: Routes.OtherScreen,
