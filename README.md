@@ -55,6 +55,7 @@ const TabsNavigator = createBottomTabNavigator({
             tabBarIcon: () => (
                 <MultiBarToggle
                     navigation={navigation}
+                    CurrentIcon={CurrentIcon.bind(this)}
                     actionSize={30}
                     routes={[
                         {
@@ -141,6 +142,11 @@ const TabsNavigator = createBottomTabNavigator({
         tabStyle: {}
     }
 });
+
+const CurrentIcon =(iconName)=>{
+    console.log('getting from icon pressed',iconName)
+}
+
 ```
 
 ## License
