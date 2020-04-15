@@ -29,9 +29,7 @@ class MultiBarToggle extends Component {
   };
 
   actionPressed = (route,backColor) => {
-    console.log('from NodeMod: ',route.icon.props,backColor)
     this.setState({changeIcon:route.icon,changeIconBack:backColor},()=>{console.log('from NodeMod: ',this.state.changeIcon,backColor)})
-    // this.setState({changeIconBack:backColor},()=>{console.log('from NodeMod: ',this.state.changeIcon,backColor)})
     this.props.CurrentIcon(route.icon.props.name)
     this.togglePressed();
 
