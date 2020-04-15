@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Animated, Text, TouchableOpacity, TouchableWithoutFeedback, Vibration, View } from 'react-native';
 import PropTypes from 'prop-types';
-
+import Icon from "react-native-vector-icons/FontAwesome";
 import { Colors } from '../utils';
 import { MultibarToggleStyles } from './Styles';
 
@@ -23,10 +23,16 @@ class MultiBarToggle extends Component {
 
   state = {
     measured: false,
-    active: false
+    active: false,
+    changeIcon:null,
+    changeIconBack:null
   };
 
-  actionPressed = (route) => {
+  actionPressed = (route,backColor) => {
+    console.log('from NodeMod: ',route.icon.props,backColor)
+    this.setState({changeIcon:route.icon,changeIconBack:backColor},()=>{console.log('from NodeMod: ',this.state.changeIcon,backColor)})
+    // this.setState({changeIconBack:backColor},()=>{console.log('from NodeMod: ',this.state.changeIcon,backColor)})
+    this.props.CurrentIcon(route.icon.props.name)
     this.togglePressed();
 
     const {
@@ -37,16 +43,16 @@ class MultiBarToggle extends Component {
     actionVibration && Vibration.vibrate();
 
     if (route.routeName) {
-      setTimeout(() => this.props.navigation.navigate({
+      setTimeout(() => this.props.navigation.push({
         name: route.routeName,
         params: route.params
       }), navigationDelay);
     }
-
     route.onPress && route.onPress();
   };
 
   togglePressed = () => {
+    console.log('longPressed')
     const {
       routes,
       toggleVibration,
@@ -131,12 +137,22 @@ class MultiBarToggle extends Component {
         >
           <AnimatedTouchable
             style={{
-              width: actionSize,
-              height: actionSize,
-              borderRadius: actionSize / 2,
+              alignItems:'center',
+              justifyContent:'center',
+              width: actionSize+7,
+              height: actionSize+7,
+              elevation:3,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 2.22,
+              borderRadius: actionSize,
               backgroundColor: route.color
             }}
-            onPress={() => this.actionPressed(route)}
+            onPress={() => this.actionPressed(route,route.color)}
           >
             <View
               pointerEvents="box-none"
@@ -163,11 +179,16 @@ class MultiBarToggle extends Component {
     this.setState({ measured: true });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.routes !== this.props.routes) {
-      this.makeActivations(nextProps.routes);
-    }
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log('get',nextProps)
+  // }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.routes !== this.props.routes) {
+  //     console.log('Will',nextProps)
+  //     this.makeActivations(nextProps.routes);
+  //   }
+  // }
 
   componentDidMount() {
     this.makeActivations(this.props.routes);
@@ -181,7 +202,6 @@ class MultiBarToggle extends Component {
       toggleSize,
       showOverlay
     } = this.props;
-
     const {
       active,
       measured
@@ -215,8 +235,10 @@ class MultiBarToggle extends Component {
           </View>
         )}
         <AnimatedTouchable
+          delayLongPress={1700}
           activeOpacity={1}
-          onPress={this.togglePressed}
+          onLongPress={this.togglePressed}
+          // onPress={this.togglePressed}
         >
           <Animated.View style={[Styles.toggleButton, {
             transform: [
@@ -226,9 +248,9 @@ class MultiBarToggle extends Component {
             width: toggleSize,
             height: toggleSize,
             borderRadius: toggleSize / 2,
-            backgroundColor: toggleColor
+            backgroundColor:this.state.changeIconBack == null?toggleColor:this.state.changeIconBack
           }]}>
-            {icon}
+            {this.state.changeIcon == null ?icon:this.state.changeIcon}
           </Animated.View>
         </AnimatedTouchable>
       </View>
