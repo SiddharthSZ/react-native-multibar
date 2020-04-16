@@ -41,10 +41,7 @@ class MultiBarToggle extends Component {
     actionVibration && Vibration.vibrate();
 
     if (route.routeName) {
-      setTimeout(() => this.props.navigation.push({
-        name: route.routeName,
-        params: route.params
-      }), navigationDelay);
+      setTimeout(() => this.props.navigation.push(name: route.routeName,{params: route.params}), navigationDelay);
     }
     route.onPress && route.onPress();
   };
